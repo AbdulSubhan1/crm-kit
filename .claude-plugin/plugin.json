@@ -1,0 +1,8 @@
+{
+  "name": "crm-kit",
+  "version": "0.1.0",
+  "description": "Build a CRM for any industry to one standard: research-based components, knowledge base and coding standard, then code and tests.",
+  "author": { "name": "Abdul Subhan" },
+  "repository": "https://github.com/AbdulSubhan1/crm-kit",
+  "license": "MIT"
+}
