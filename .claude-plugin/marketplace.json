@@ -1,6 +1,9 @@
 {
   "name": "crm-kit",
-  "owner": { "name": "Abdul Subhan" },
+  "description": "Abdul Subhan's CRM kit: build a CRM for any industry to one standard.",
+  "owner": {
+    "name": "Abdul Subhan"
+  },
   "plugins": [
     {
       "name": "crm-kit",

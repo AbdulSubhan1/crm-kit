@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { access, mkdir, mkdtemp, readFile, readdir, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, readdir, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -37,6 +37,24 @@ test("creates a configured project with one commit", async () => {
 
   const log = execFileSync("git", ["log", "--format=%s"], { cwd: dest, encoding: "utf8" }).trim().split("\n");
   assert.deepEqual(log, ["chore: start from crm-kit 0.1.0"]);
+});
+
+test("the files create writes pass the project's own Prettier check", async (t) => {
+  const prettier = join(KIT, "template/node_modules/.bin/prettier");
+  try {
+    await access(prettier);
+  } catch {
+    return t.skip("template dependencies are not installed");
+  }
+  const dest = join(await mkdtemp(join(tmpdir(), "crm-kit-format-")), "fitdesk");
+  await createProject(dest, ANSWERS, { kitDir: KIT });
+  // Prettier loads the Tailwind plugin from the project, so borrow the template's installed packages
+  await symlink(join(KIT, "template/node_modules"), join(dest, "node_modules"));
+  // Throws (exit 1) if any written file is not formatted the way npm run check expects
+  execFileSync(prettier, ["--check", ".crm-kit.json", "package.json", "constants/market.ts", "messages", "app/globals.css"], {
+    cwd: dest,
+    stdio: "pipe",
+  });
 });
 
 test("refuses a folder that exists and is not empty, and leaves it alone", async () => {
