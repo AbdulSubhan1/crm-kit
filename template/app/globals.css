@@ -10,9 +10,11 @@
   --color-paper: #f4f6f8;
   --color-line: #e2e6ec;
 
+  /* brand:start */
   --color-brand: #0e7c66;
   --color-brand-strong: #0a5e4d;
   --color-brand-soft: #e2f1ec;
+  /* brand:end */
 
   --color-info: #2c6e9b;
   --color-info-soft: #e3eef6;

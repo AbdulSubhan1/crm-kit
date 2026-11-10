@@ -19,7 +19,7 @@ export const COUNTRIES: Country[] = [
   { code: "DE", name: "Germany", dial: "+49", flag: "🇩🇪", min: 10, max: 11 },
 ];
 
-export const DEFAULT_COUNTRY = "AE";
+export { DEFAULT_COUNTRY } from "./market";
 
 /** Splits "+971501234567" into its country and national number, matching the longest dialling code. */
 export function splitPhone(value: string | null | undefined) {

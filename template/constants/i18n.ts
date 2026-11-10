@@ -1,11 +1,10 @@
-export const LOCALES = ["en", "ar"] as const;
+import { DEFAULT_LOCALE as DEFAULT, LOCALES } from "./market";
+
+export { LOCALE_NAMES, LOCALES, RTL_LOCALES } from "./market";
 export type Locale = (typeof LOCALES)[number];
 
-export const DEFAULT_LOCALE: Locale = "en";
+export const DEFAULT_LOCALE: Locale = DEFAULT;
 export const LOCALE_COOKIE = "app_locale";
-export const RTL_LOCALES: Locale[] = ["ar"];
-
-export const LOCALE_NAMES: Record<Locale, string> = { en: "English", ar: "العربية" };
 
 /** Text stored in the database in several languages. English is always present. */
 export type Localized = { en: string } & Partial<Record<Locale, string>>;

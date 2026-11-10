@@ -1,4 +1,4 @@
-import { CURRENCY } from "@/constants/config";
+import { CURRENCY } from "@/constants/market";
 
 export function money(amount: number) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: CURRENCY, maximumFractionDigits: 0 }).format(

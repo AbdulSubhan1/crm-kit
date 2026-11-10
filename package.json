@@ -1,0 +1,9 @@
+{
+  "name": "crm-kit",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"scripts/*.test.mjs\"",
+    "check": "node scripts/check-kit.mjs"
+  }
+}
