@@ -1,0 +1,245 @@
+diff --git a/constants/navigation.ts b/constants/navigation.ts
+index 7ab45fb..b4d6e50 100644
+--- a/constants/navigation.ts
++++ b/constants/navigation.ts
+@@ -7,7 +7,15 @@ export type NavItem = { href: string; labelKey: string; icon: IconName; anyOf: P
+ export const NAVIGATION: { titleKey: string; items: NavItem[] }[] = [
+   {
+     titleKey: "nav.main",
+-    items: [{ href: "/", labelKey: "nav.dashboard", icon: "dashboard", anyOf: ["dashboard:view"] }],
++    items: [
++      { href: "/", labelKey: "nav.dashboard", icon: "dashboard", anyOf: ["dashboard:view"] },
++      {
++        href: "/contacts",
++        labelKey: "nav.contacts",
++        icon: "users",
++        anyOf: ["contacts:view_all", "contacts:view_team", "contacts:view_own"],
++      },
++    ],
+   },
+   {
+     titleKey: "nav.settings",
+diff --git a/constants/permissions.ts b/constants/permissions.ts
+index 1923065..7dad275 100644
+--- a/constants/permissions.ts
++++ b/constants/permissions.ts
+@@ -3,6 +3,11 @@
+ // Each module adds its own, e.g. "members:view_all", "members:view_team", "members:view_own", "members:edit".
+ export const PERMISSIONS = {
+   "dashboard:view": "dashboard",
++  "contacts:view_all": "contacts",
++  "contacts:view_team": "contacts",
++  "contacts:view_own": "contacts",
++  "contacts:create": "contacts",
++  "contacts:edit": "contacts",
+   "users:manage": "admin",
+   "roles:manage": "admin",
+   "audit:view": "admin",
+diff --git a/messages/ar.json b/messages/ar.json
+index 63163d2..3263dd3 100644
+--- a/messages/ar.json
++++ b/messages/ar.json
+@@ -48,7 +48,8 @@
+     "audit": "سجل التدقيق",
+     "designSystem": "مكتبة المكونات",
+     "reference": "المرجع",
+-    "kb": "قاعدة المعرفة"
++    "kb": "قاعدة المعرفة",
++    "contacts": "جهات الاتصال"
+   },
+   "status": {
+     "active": "سارية",
+@@ -56,13 +57,19 @@
+   },
+   "permissionGroups": {
+     "dashboard": "لوحة التحكم",
+-    "admin": "الإدارة"
++    "admin": "الإدارة",
++    "contacts": "جهات الاتصال"
+   },
+   "permissions": {
+     "dashboard:view": "عرض لوحة التحكم",
+     "users:manage": "إدارة المستخدمين",
+     "roles:manage": "إدارة الأدوار والصلاحيات",
+-    "audit:view": "عرض سجل التدقيق"
++    "audit:view": "عرض سجل التدقيق",
++    "contacts:view_all": "عرض كل جهات الاتصال",
++    "contacts:view_team": "عرض جهات اتصال الفريق",
++    "contacts:view_own": "عرض جهات الاتصال الخاصة",
++    "contacts:create": "إنشاء جهات اتصال",
++    "contacts:edit": "تعديل جهات الاتصال"
+   },
+   "validation": {
+     "required": "هذا الحقل مطلوب",
+@@ -297,5 +304,30 @@
+       "conversion": "معدل التحويل",
+       "revenue": "الإيرادات هذا العام"
+     }
++  },
++  "contacts": {
++    "title": "جهات الاتصال",
++    "description": "الأشخاص الذين يتعامل معهم العمل.",
++    "new": "جهة اتصال جديدة",
++    "name": "الاسم الكامل",
++    "email": "البريد الإلكتروني",
++    "phone": "الهاتف",
++    "notes": "ملاحظات",
++    "owner": "المسؤول",
++    "updated": "آخر تحديث",
++    "search": "ابحث بالاسم أو البريد أو المرجع",
++    "empty": "لا توجد جهات اتصال تطابق هذا البحث.",
++    "create": "إنشاء جهة اتصال",
++    "creating": "جارٍ الإنشاء…",
++    "ownedBy": "المسؤول: {owner}",
++    "details": "التفاصيل",
++    "activity": "النشاط",
++    "note": "ملاحظة",
++    "addNote": "إضافة ملاحظة",
++    "noActivity": "لا يوجد نشاط بعد",
++    "events": {
++      "create": "أنشأ {name} جهة الاتصال",
++      "note": "أضاف {name} ملاحظة"
++    }
+   }
+ }
+diff --git a/messages/en.json b/messages/en.json
+index ebacc4d..c201edf 100644
+--- a/messages/en.json
++++ b/messages/en.json
+@@ -48,7 +48,8 @@
+     "audit": "Audit log",
+     "designSystem": "Component library",
+     "reference": "Reference",
+-    "kb": "Knowledge base"
++    "kb": "Knowledge base",
++    "contacts": "Contacts"
+   },
+   "status": {
+     "active": "Active",
+@@ -56,13 +57,19 @@
+   },
+   "permissionGroups": {
+     "dashboard": "Dashboard",
+-    "admin": "Administration"
++    "admin": "Administration",
++    "contacts": "Contacts"
+   },
+   "permissions": {
+     "dashboard:view": "View dashboard",
+     "users:manage": "Manage users",
+     "roles:manage": "Manage roles and permissions",
+-    "audit:view": "View audit log"
++    "audit:view": "View audit log",
++    "contacts:view_all": "See all contacts",
++    "contacts:view_team": "See the team's contacts",
++    "contacts:view_own": "See own contacts",
++    "contacts:create": "Create contacts",
++    "contacts:edit": "Edit contacts"
+   },
+   "validation": {
+     "required": "This field is required",
+@@ -297,5 +304,30 @@
+       "conversion": "Conversion rate",
+       "revenue": "Revenue this year"
+     }
++  },
++  "contacts": {
++    "title": "Contacts",
++    "description": "People the business works with.",
++    "new": "New contact",
++    "name": "Full name",
++    "email": "Email",
++    "phone": "Phone",
++    "notes": "Notes",
++    "owner": "Owner",
++    "updated": "Updated",
++    "search": "Search by name, email or reference",
++    "empty": "No contacts match this search.",
++    "create": "Create contact",
++    "creating": "Creating…",
++    "ownedBy": "Owned by {owner}",
++    "details": "Details",
++    "activity": "Activity",
++    "note": "Note",
++    "addNote": "Add note",
++    "noActivity": "No activity yet",
++    "events": {
++      "create": "{name} created this contact",
++      "note": "{name} added a note"
++    }
+   }
+ }
+diff --git a/scripts/setup-db.ts b/scripts/setup-db.ts
+index 8e9febd..53b15c1 100644
+--- a/scripts/setup-db.ts
++++ b/scripts/setup-db.ts
+@@ -10,6 +10,7 @@ import { migrate as migrateNeon } from "drizzle-orm/neon-http/migrator";
+ import { migrate as migratePglite } from "drizzle-orm/pglite/migrator";
+ import { DEMO_PASSWORD } from "@/constants/config";
+ import { DEMO_ACCOUNTS, DEMO_ROLES } from "@/constants/demo";
++import { newReference } from "@/lib/reference";
+ import { ALL_PERMISSIONS } from "@/lib/rbac";
+ import { db, schema } from "@/server/db";
+ 
+@@ -47,9 +48,28 @@ async function seed() {
+     .insert(schema.users)
+     .values(DEMO_ACCOUNTS.map((u) => ({ name: u.name, email: u.email, passwordHash, roleId: roleIds.get(u.role)! })));
+ 
+-  await db
+-    .insert(schema.auditLogs)
+-    .values({ userId: null, action: "seed", entity: "system", details: "Demo data created" });
++  const [admin] = await db.select({ id: schema.users.id }).from(schema.users).limit(1);
++  const contacts = await db
++    .insert(schema.contacts)
++    .values(
++      [
++        ["Ahmed Rahman", "ahmed@example.com", "+971501234567"],
++        ["Layla Haddad", "layla@example.com", "+971551234567"],
++        ["Bilal Khan", "bilal@example.com", "+923001234567"],
++      ].map(([name, email, phone]) => ({ name, email, phone, reference: newReference("CON"), ownerId: admin.id })),
++    )
++    .returning();
++
++  await db.insert(schema.auditLogs).values([
++    { userId: null, action: "seed", entity: "system", details: "Demo data created" },
++    ...contacts.map((c) => ({
++      userId: admin.id,
++      action: "create",
++      entity: "contact",
++      entityId: c.id,
++      details: c.reference,
++    })),
++  ]);
+ }
+ 
+ async function main() {
+diff --git a/server/db/schema.ts b/server/db/schema.ts
+index f84c30d..7b12165 100644
+--- a/server/db/schema.ts
++++ b/server/db/schema.ts
+@@ -1,4 +1,4 @@
+-import { boolean, integer, pgTable, primaryKey, serial, text, timestamp } from "drizzle-orm/pg-core";
++import { boolean, integer, pgTable, primaryKey, serial, text, timestamp, uuid } from "drizzle-orm/pg-core";
+ 
+ // The platform tables every CRM starts with. Business tables are added by each CRM's modules.
+ 
+@@ -50,3 +50,19 @@ export const auditLogs = pgTable("audit_logs", {
+   details: text("details").notNull().default(""),
+   createdAt: timestamp("created_at").notNull().defaultNow(),
+ });
++
++/** People the business works with. Links use publicId; people quote the reference, e.g. CON-J2M3HX7. */
++export const contacts = pgTable("contacts", {
++  id: serial("id").primaryKey(),
++  publicId: uuid("public_id").notNull().unique().defaultRandom(),
++  reference: text("reference").notNull().unique(),
++  name: text("name").notNull(),
++  email: text("email").notNull(),
++  phone: text("phone").notNull(),
++  notes: text("notes").notNull().default(""),
++  // Scope columns: the team that sees it and the person who owns it
++  teamId: integer("team_id").references(() => teams.id),
++  ownerId: integer("owner_id").references(() => users.id),
++  createdAt: timestamp("created_at").notNull().defaultNow(),
++  updatedAt: timestamp("updated_at").notNull().defaultNow(),
++});
