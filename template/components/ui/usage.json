@@ -1,0 +1,139 @@
+{
+  "Button": [
+    "app/(app)/admin/roles/page.tsx",
+    "app/(app)/admin/users/page.tsx",
+    "app/(app)/error.tsx",
+    "components/forms/login-form.tsx",
+    "components/forms/role-form.tsx",
+    "components/layout/locale-switch.tsx",
+    "components/layout/sidebar.tsx"
+  ],
+  "ButtonLink": [
+    "app/(app)/design-system/[name]/page.tsx"
+  ],
+  "Field": [
+    "components/forms/login-form.tsx",
+    "components/forms/role-form.tsx"
+  ],
+  "InlineForm": [
+    "app/(app)/admin/users/page.tsx"
+  ],
+  "FormError": [
+    "components/forms/login-form.tsx",
+    "components/forms/role-form.tsx"
+  ],
+  "Hidden": [
+    "app/(app)/admin/roles/page.tsx",
+    "app/(app)/admin/users/page.tsx",
+    "components/layout/locale-switch.tsx"
+  ],
+  "Input": [
+    "components/forms/login-form.tsx",
+    "components/forms/role-form.tsx"
+  ],
+  "PasswordInput": [
+    "components/forms/login-form.tsx"
+  ],
+  "NumberInput": [],
+  "PhoneInput": [],
+  "OtpInput": [],
+  "Textarea": [],
+  "FileUpload": [],
+  "Autocomplete": [
+    "app/(app)/admin/users/page.tsx",
+    "components/forms/form-autocomplete.tsx"
+  ],
+  "MultiSelect": [],
+  "Checkbox": [
+    "app/(app)/admin/roles/page.tsx"
+  ],
+  "Radio": [],
+  "RadioGroup": [],
+  "Switch": [],
+  "SegmentGroup": [],
+  "Rating": [],
+  "DatePicker": [],
+  "Dialog": [],
+  "AlertDialog": [
+    "app/(app)/admin/users/page.tsx"
+  ],
+  "Popover": [],
+  "Tooltip": [],
+  "DropdownMenu": [],
+  "ActionBar": [],
+  "Tabs": [],
+  "PillNav": [
+    "app/(app)/design-system/[name]/page.tsx",
+    "app/(app)/kb/[[...slug]]/page.tsx"
+  ],
+  "Alert": [],
+  "Toast": [],
+  "EmptyState": [
+    "app/(app)/error.tsx",
+    "app/(app)/page.tsx"
+  ],
+  "Skeleton": [
+    "components/layout/list-skeleton.tsx"
+  ],
+  "Spinner": [],
+  "Progress": [],
+  "Forbidden": [
+    "app/(app)/admin/roles/page.tsx",
+    "app/(app)/admin/users/page.tsx",
+    "app/(app)/audit/page.tsx",
+    "app/(app)/page.tsx"
+  ],
+  "PageHeader": [
+    "app/(app)/admin/roles/page.tsx",
+    "app/(app)/admin/users/page.tsx",
+    "app/(app)/audit/page.tsx",
+    "app/(app)/design-system/[name]/page.tsx",
+    "app/(app)/design-system/page.tsx",
+    "app/(app)/kb/[[...slug]]/page.tsx",
+    "app/(app)/page.tsx"
+  ],
+  "Panel": [
+    "app/(app)/admin/roles/page.tsx",
+    "app/(app)/design-system/[name]/page.tsx",
+    "app/(app)/design-system/page.tsx",
+    "app/(app)/error.tsx",
+    "app/(app)/page.tsx",
+    "app/login/page.tsx",
+    "components/forms/role-form.tsx",
+    "components/kb/kb-article.tsx",
+    "components/layout/list-skeleton.tsx"
+  ],
+  "PanelSection": [],
+  "DetailList": [],
+  "DataTable": [
+    "app/(app)/admin/users/page.tsx",
+    "app/(app)/audit/page.tsx",
+    "app/(app)/design-system/[name]/page.tsx"
+  ],
+  "CellText": [
+    "app/(app)/admin/users/page.tsx"
+  ],
+  "ListRow": [],
+  "Badge": [
+    "app/(app)/admin/roles/page.tsx",
+    "app/(app)/design-system/[name]/page.tsx"
+  ],
+  "Stat": [],
+  "Timeline": [],
+  "Avatar": [
+    "app/(app)/admin/users/page.tsx",
+    "components/layout/sidebar.tsx"
+  ],
+  "AvatarGroup": [],
+  "Icon": [
+    "app/(app)/design-system/[name]/page.tsx",
+    "components/layout/locale-switch.tsx",
+    "components/layout/nav-link.tsx"
+  ],
+  "MotionHighlight": [
+    "components/layout/sidebar.tsx"
+  ],
+  "NumberTicker": [],
+  "SpotlightCard": [],
+  "ShimmerText": []
+}

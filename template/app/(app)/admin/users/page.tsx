@@ -1,0 +1,120 @@
+import { getTranslations } from "next-intl/server";
+import {
+  AlertDialog,
+  Autocomplete,
+  Avatar,
+  Button,
+  CellText,
+  DataTable,
+  Forbidden,
+  Hidden,
+  InlineForm,
+  PageHeader,
+} from "@/components/ui";
+import { can } from "@/lib/rbac";
+import { toggleUserActive, updateUser } from "@/server/actions/users";
+import { requireUser } from "@/server/auth";
+import { listRoles, listTeams, listUsers } from "@/server/queries/users";
+
+export default async function UsersPage() {
+  const user = await requireUser();
+  if (!can(user, "users:manage")) return <Forbidden permission="users:manage" />;
+
+  const [userRows, roleRows, teamRows, t] = await Promise.all([
+    listUsers(),
+    listRoles(),
+    listTeams(),
+    getTranslations(),
+  ]);
+  const roleOptions = roleRows.map((r) => ({ value: String(r.id), label: r.name }));
+  // Teams appear only once a module uses them; until then the page shows roles alone
+  const teamOptions = teamRows.length
+    ? [{ value: "", label: t("users.noTeam") }, ...teamRows.map((d) => ({ value: String(d.id), label: d.name }))]
+    : null;
+
+  return (
+    <>
+      <PageHeader title={t("users.title")} description={t("users.description")} />
+      <DataTable
+        path="/admin/users"
+        rows={userRows}
+        rowKey={(u) => u.id}
+        minWidth="lg"
+        empty={{ title: t("users.title"), icon: "users" }}
+        columns={[
+          {
+            key: "user",
+            header: t("users.user"),
+            cell: (u) => (
+              <span className="flex min-w-0 items-center gap-3">
+                <Avatar name={u.name} />
+                <CellText primary={u.id === user.id ? `${u.name} ${t("users.you")}` : u.name} secondary={u.email} />
+              </span>
+            ),
+          },
+          {
+            key: "role",
+            header: teamOptions ? t("users.roleTeam") : t("users.role"),
+            cell: (u) =>
+              u.id === user.id ? (
+                <CellText primary={u.roleName} secondary={u.teamName ?? undefined} />
+              ) : (
+                <InlineForm key={`${u.roleId}-${u.teamId}`} action={updateUser}>
+                  <Hidden name="userId" value={u.id} />
+                  <Autocomplete
+                    name="roleId"
+                    defaultValue={u.roleId}
+                    aria-label={t("users.role")}
+                    options={roleOptions}
+                  />
+                  {teamOptions && (
+                    <Autocomplete
+                      name="teamId"
+                      defaultValue={u.teamId ?? ""}
+                      aria-label={t("users.team")}
+                      options={teamOptions}
+                    />
+                  )}
+                  <Button size="sm">{t("common.save")}</Button>
+                </InlineForm>
+              ),
+          },
+          {
+            key: "status",
+            header: t("users.status"),
+            cell: (u) => (
+              <span className={u.active ? "text-brand-strong" : "text-muted"}>
+                {u.active ? t("users.active") : t("users.deactivated")}
+              </span>
+            ),
+          },
+          {
+            key: "toggle",
+            header: "",
+            align: "end",
+            cell: (u) =>
+              u.id !== user.id && (
+                <form action={toggleUserActive}>
+                  <Hidden name="userId" value={u.id} />
+                  {u.active ? (
+                    <AlertDialog
+                      trigger={
+                        <Button type="button" size="sm" variant="danger">
+                          {t("common.deactivate")}
+                        </Button>
+                      }
+                      title={t("users.deactivateTitle", { name: u.name })}
+                      description={t("users.deactivateBody")}
+                      confirmLabel={t("common.deactivate")}
+                    />
+                  ) : (
+                    <Button size="sm">{t("common.activate")}</Button>
+                  )}
+                </form>
+              ),
+          },
+        ]}
+      />
+    </>
+  );
+}
