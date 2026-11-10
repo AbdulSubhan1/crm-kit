@@ -45,7 +45,7 @@ export default async function DesignSystemPage() {
             <p className="text-2xl font-semibold tracking-tight">{t("sampleHeading")}</p>
             <p className="text-sm text-ink-soft">{t("sampleBody")}</p>
             <p lang="ar" dir="rtl" className="text-sm text-ink-soft">
-              تغطية شاملة للسيارة مع إصلاح لدى الوكالة
+              ملخص أسبوعي للعملاء والمواعيد والمدفوعات
             </p>
             <p className="font-mono text-sm">PD-2026-00034</p>
           </div>

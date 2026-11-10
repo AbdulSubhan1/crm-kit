@@ -104,7 +104,7 @@ export function DataDemos({ name, path, params }: DemoProps) {
           <div className="max-w-xs">
             <CellText
               href={path}
-              primary="Muhammad Abdullah Al-Rashidi Insurance Brokers LLC"
+              primary="Muhammad Abdullah Al-Rashidi Trading and General Services LLC"
               secondary="ahmed.rahman.longemail@example.com"
             />
           </div>
