@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DEFAULT_LOCALE, RTL_LOCALES } from "@/constants/market";
 import { cn } from "@/lib/cn";
 import { Icon } from "./icon";
 import { control } from "./styles";
@@ -62,7 +63,9 @@ export function DatePicker({
   const close = useCallback(() => setOpen(false), []);
   useDismiss(ref, open, close);
 
-  const intl = locale === "ar" ? "ar-AE" : "en-GB";
+  // English dates read "14 Feb 2031"; other languages use their own format
+  const intl = locale === DEFAULT_LOCALE ? "en-GB" : locale;
+  const rtl = RTL_LOCALES.includes(locale);
   const outOfRange = (iso: string) => (min !== undefined && iso < min) || (max !== undefined && iso > max);
 
   useEffect(() => {
@@ -180,8 +183,8 @@ export function DatePicker({
               role="grid"
               onKeyDown={(e) => {
                 const moves: Record<string, Date> = {
-                  ArrowLeft: addDays(cursor, locale === "ar" ? 1 : -1),
-                  ArrowRight: addDays(cursor, locale === "ar" ? -1 : 1),
+                  ArrowLeft: addDays(cursor, rtl ? 1 : -1),
+                  ArrowRight: addDays(cursor, rtl ? -1 : 1),
                   ArrowUp: addDays(cursor, -7),
                   ArrowDown: addDays(cursor, 7),
                   PageUp: addMonths(cursor, -1),

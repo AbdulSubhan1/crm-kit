@@ -1,0 +1,40 @@
+{
+  "nav": {
+    "contacts": "Contacts"
+  },
+  "permissionGroups": {
+    "contacts": "Contacts"
+  },
+  "permissions": {
+    "contacts:view_all": "See all contacts",
+    "contacts:view_team": "See the team's contacts",
+    "contacts:view_own": "See own contacts",
+    "contacts:create": "Create contacts",
+    "contacts:edit": "Edit contacts"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "description": "People the business works with.",
+    "new": "New contact",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "notes": "Notes",
+    "owner": "Owner",
+    "updated": "Updated",
+    "search": "Search by name, email or reference",
+    "empty": "No contacts match this search.",
+    "create": "Create contact",
+    "creating": "Creating…",
+    "ownedBy": "Owned by {owner}",
+    "details": "Details",
+    "activity": "Activity",
+    "note": "Note",
+    "addNote": "Add note",
+    "noActivity": "No activity yet",
+    "events": {
+      "create": "{name} created this contact",
+      "note": "{name} added a note"
+    }
+  }
+}

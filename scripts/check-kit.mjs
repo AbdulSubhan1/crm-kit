@@ -1,12 +1,14 @@
 // The kit's self-check: skills are well formed and point at files that exist, the template carries no
 // business words, and the two manifests agree on the version.   node scripts/check-kit.mjs
 import { access, readFile, readdir } from "node:fs/promises";
-import { join, relative } from "node:path";
-import { BUSINESS_WORDS } from "./sync-back.mjs";
+import { join, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { BUSINESS_PATTERNS, BUSINESS_WORDS } from "./sync-back.mjs";
 
-const SKIP_DIRS = new Set(["node_modules", ".next", "drizzle", "test-results", "playwright-report", ".git"]);
+// Migrations are scanned too: a business table name there means business code came back
+const SKIP_DIRS = new Set(["node_modules", ".next", "test-results", "playwright-report", ".git"]);
 const SKIP_FILES = new Set(["package-lock.json", "next-env.d.ts"]);
-const TEXT = /\.(tsx?|mjs|js|json|md|css|ya?ml)$/;
+const TEXT = /\.(tsx?|mjs|js|json|md|css|ya?ml|sql)$/;
 // Paths inside the kit that skills may mention. Kit scripts are .mjs; a skill's "scripts/setup-db.ts"
 // is the CRM's own file, so only .mjs scripts are checked.
 const KIT_PATH = /\b(?:(?:references|skills|template)\/[\w./()[\]-]*[\w)\]]|scripts\/[\w./-]+\.mjs)/g;
@@ -20,7 +22,9 @@ const exists = (path) =>
 async function* walk(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) {
-      if (!SKIP_DIRS.has(entry.name) && !entry.name.startsWith(".pglite")) yield* walk(join(dir, entry.name));
+      // drizzle/meta snapshots use "policies" for Postgres row-security settings, not business data
+      const drizzleMeta = entry.name === "meta" && dir.endsWith("drizzle");
+      if (!SKIP_DIRS.has(entry.name) && !entry.name.startsWith(".pglite") && !drizzleMeta) yield* walk(join(dir, entry.name));
     } else if (TEXT.test(entry.name) && !SKIP_FILES.has(entry.name)) {
       yield join(dir, entry.name);
     }
@@ -54,8 +58,8 @@ async function checkTemplate(kitDir, problems) {
   for await (const file of walk(join(kitDir, "template"))) {
     const lines = (await readFile(file, "utf8")).split("\n");
     lines.forEach((line, i) => {
-      const hit = words.find(([, re]) => re.test(line));
-      if (hit) problems.push(`${relative(kitDir, file)}:${i + 1}: business word "${hit[0]}"`);
+      const word = words.find(([, re]) => re.test(line))?.[0] ?? BUSINESS_PATTERNS.map((re) => line.match(re)?.[0]).find(Boolean);
+      if (word) problems.push(`${relative(kitDir, file)}:${i + 1}: business word "${word}"`);
     });
   }
 }
@@ -81,8 +85,8 @@ export async function checkKit(kitDir) {
 }
 
 // CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const problems = await checkKit(new URL("../", import.meta.url).pathname);
+if (fileURLToPath(import.meta.url) === resolve(process.argv[1] ?? "")) {
+  const problems = await checkKit(fileURLToPath(new URL("../", import.meta.url)));
   for (const p of problems) console.log(p);
   process.exit(problems.length ? 1 : 0);
 }

@@ -14,7 +14,7 @@ Read `AGENTS.md` before writing any code. It is the standard; this skill does no
 ## For each module, in the order the overview lists
 
 1. **Copy the pattern:** follow `references/module-pattern/MAP.md`.
-   - Copy `references/module-pattern/files/` and apply `references/module-pattern/edits.patch`.
+   - Copy `references/module-pattern/files/`, apply `references/module-pattern/edits.patch`, and merge `references/module-pattern/messages.json` into every locale (translated).
    - Rename contact/contacts/CON to the module's names and reference code.
 2. **Shape it to the knowledge base**, in this order:
    1. `constants/` for statuses (`constants/statuses.ts` with their tones) and options;

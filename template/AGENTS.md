@@ -9,7 +9,7 @@ These rules are strict. They apply to every person and every AI model working in
 | `app/`                  | Routes only: `page.tsx`, `layout.tsx`, one `route.ts` for file downloads                  | Business logic, queries, reusable components |
 | `components/ui/`        | The UI library: one component per file, exported from `index.ts`, listed in `registry.ts` | Data fetching, translations of feature text  |
 | `components/forms/`     | Client forms built with React Hook Form + `useActionForm`                                 | Server code                                  |
-| `components/<feature>/` | Feature sections, e.g. `members/payments-tab.tsx`, `dashboard/stats.tsx`                  | Raw HTML controls                            |
+| `components/<feature>/` | Feature sections, e.g. `<area>/payments-tab.tsx`, `dashboard/stats.tsx`                   | Raw HTML controls                            |
 | `constants/`            | Fixed values: statuses, products, permissions, navigation, config, i18n                   | Functions with side effects                  |
 | `schemas/`              | Zod schemas shared by forms and server actions                                            | UI code                                      |
 | `server/actions/`       | `"use server"` files, one per feature                                                     | Read-only queries                            |
@@ -50,7 +50,7 @@ These rules are strict. They apply to every person and every AI model working in
 - **Phone numbers:** use `PhoneInput` (stored as E.164) and validate with `phone`.
 - **Pick the right control:** several values `MultiSelect`; a day `DatePicker` (never `<Input type="date">`); amounts `NumberInput`; files `FileUpload`; passwords `PasswordInput`; on/off settings `Switch`; two to five options side by side `SegmentGroup`. Controls made of several elements (`PhoneInput`, `DatePicker`, `MultiSelect`, `FileUpload`) go in `<Field group>`; in React Hook Form wrap `DatePicker` and `MultiSelect` in `Controller`.
 - **Confirm destructive one-click actions** with `AlertDialog` inside the action's `<form>`. Bulk actions on a list: `DataTable select` + `ActionBar` + a `<form id>` for the server action.
-- **Feedback:** forms using `useActionForm` toast on success; pass `success` for a specific message. List routes have a `loading.tsx` (`ListSkeleton`). A `loading.tsx` makes the route stream, which turns a later `notFound()` into status 200, so detail routes check access in their `layout.tsx` first (see `members/[id]/layout.tsx` in the module pattern) and keep their skeleton below it.
+- **Feedback:** forms using `useActionForm` toast on success; pass `success` for a specific message. List routes have a `loading.tsx` (`ListSkeleton`). A `loading.tsx` makes the route stream, which turns a later `notFound()` into status 200, so detail routes check access in their `layout.tsx` first (see `<area>/[id]/layout.tsx` in the module pattern) and keep their skeleton below it.
 - **Placeholders:** every empty input and dropdown has a placeholder from `messages` (`placeholders.*`).
 - **One component per file.** File name is the kebab-case component name.
 - New component checklist:

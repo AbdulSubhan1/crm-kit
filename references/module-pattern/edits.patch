@@ -20,11 +20,11 @@ index 7ab45fb..b4d6e50 100644
    {
      titleKey: "nav.settings",
 diff --git a/constants/permissions.ts b/constants/permissions.ts
-index 1923065..7dad275 100644
+index 9ec10cc..5c84e00 100644
 --- a/constants/permissions.ts
 +++ b/constants/permissions.ts
 @@ -3,6 +3,11 @@
- // Each module adds its own, e.g. "members:view_all", "members:view_team", "members:view_own", "members:edit".
+ // Each module adds its own: <area>:view_all, <area>:view_team, <area>:view_own, <area>:create, <area>:edit.
  export const PERMISSIONS = {
    "dashboard:view": "dashboard",
 +  "contacts:view_all": "contacts",
@@ -35,140 +35,6 @@ index 1923065..7dad275 100644
    "users:manage": "admin",
    "roles:manage": "admin",
    "audit:view": "admin",
-diff --git a/messages/ar.json b/messages/ar.json
-index 63163d2..3263dd3 100644
---- a/messages/ar.json
-+++ b/messages/ar.json
-@@ -48,7 +48,8 @@
-     "audit": "سجل التدقيق",
-     "designSystem": "مكتبة المكونات",
-     "reference": "المرجع",
--    "kb": "قاعدة المعرفة"
-+    "kb": "قاعدة المعرفة",
-+    "contacts": "جهات الاتصال"
-   },
-   "status": {
-     "active": "سارية",
-@@ -56,13 +57,19 @@
-   },
-   "permissionGroups": {
-     "dashboard": "لوحة التحكم",
--    "admin": "الإدارة"
-+    "admin": "الإدارة",
-+    "contacts": "جهات الاتصال"
-   },
-   "permissions": {
-     "dashboard:view": "عرض لوحة التحكم",
-     "users:manage": "إدارة المستخدمين",
-     "roles:manage": "إدارة الأدوار والصلاحيات",
--    "audit:view": "عرض سجل التدقيق"
-+    "audit:view": "عرض سجل التدقيق",
-+    "contacts:view_all": "عرض كل جهات الاتصال",
-+    "contacts:view_team": "عرض جهات اتصال الفريق",
-+    "contacts:view_own": "عرض جهات الاتصال الخاصة",
-+    "contacts:create": "إنشاء جهات اتصال",
-+    "contacts:edit": "تعديل جهات الاتصال"
-   },
-   "validation": {
-     "required": "هذا الحقل مطلوب",
-@@ -297,5 +304,30 @@
-       "conversion": "معدل التحويل",
-       "revenue": "الإيرادات هذا العام"
-     }
-+  },
-+  "contacts": {
-+    "title": "جهات الاتصال",
-+    "description": "الأشخاص الذين يتعامل معهم العمل.",
-+    "new": "جهة اتصال جديدة",
-+    "name": "الاسم الكامل",
-+    "email": "البريد الإلكتروني",
-+    "phone": "الهاتف",
-+    "notes": "ملاحظات",
-+    "owner": "المسؤول",
-+    "updated": "آخر تحديث",
-+    "search": "ابحث بالاسم أو البريد أو المرجع",
-+    "empty": "لا توجد جهات اتصال تطابق هذا البحث.",
-+    "create": "إنشاء جهة اتصال",
-+    "creating": "جارٍ الإنشاء…",
-+    "ownedBy": "المسؤول: {owner}",
-+    "details": "التفاصيل",
-+    "activity": "النشاط",
-+    "note": "ملاحظة",
-+    "addNote": "إضافة ملاحظة",
-+    "noActivity": "لا يوجد نشاط بعد",
-+    "events": {
-+      "create": "أنشأ {name} جهة الاتصال",
-+      "note": "أضاف {name} ملاحظة"
-+    }
-   }
- }
-diff --git a/messages/en.json b/messages/en.json
-index ebacc4d..c201edf 100644
---- a/messages/en.json
-+++ b/messages/en.json
-@@ -48,7 +48,8 @@
-     "audit": "Audit log",
-     "designSystem": "Component library",
-     "reference": "Reference",
--    "kb": "Knowledge base"
-+    "kb": "Knowledge base",
-+    "contacts": "Contacts"
-   },
-   "status": {
-     "active": "Active",
-@@ -56,13 +57,19 @@
-   },
-   "permissionGroups": {
-     "dashboard": "Dashboard",
--    "admin": "Administration"
-+    "admin": "Administration",
-+    "contacts": "Contacts"
-   },
-   "permissions": {
-     "dashboard:view": "View dashboard",
-     "users:manage": "Manage users",
-     "roles:manage": "Manage roles and permissions",
--    "audit:view": "View audit log"
-+    "audit:view": "View audit log",
-+    "contacts:view_all": "See all contacts",
-+    "contacts:view_team": "See the team's contacts",
-+    "contacts:view_own": "See own contacts",
-+    "contacts:create": "Create contacts",
-+    "contacts:edit": "Edit contacts"
-   },
-   "validation": {
-     "required": "This field is required",
-@@ -297,5 +304,30 @@
-       "conversion": "Conversion rate",
-       "revenue": "Revenue this year"
-     }
-+  },
-+  "contacts": {
-+    "title": "Contacts",
-+    "description": "People the business works with.",
-+    "new": "New contact",
-+    "name": "Full name",
-+    "email": "Email",
-+    "phone": "Phone",
-+    "notes": "Notes",
-+    "owner": "Owner",
-+    "updated": "Updated",
-+    "search": "Search by name, email or reference",
-+    "empty": "No contacts match this search.",
-+    "create": "Create contact",
-+    "creating": "Creating…",
-+    "ownedBy": "Owned by {owner}",
-+    "details": "Details",
-+    "activity": "Activity",
-+    "note": "Note",
-+    "addNote": "Add note",
-+    "noActivity": "No activity yet",
-+    "events": {
-+      "create": "{name} created this contact",
-+      "note": "{name} added a note"
-+    }
-   }
- }
 diff --git a/scripts/setup-db.ts b/scripts/setup-db.ts
 index 8e9febd..53b15c1 100644
 --- a/scripts/setup-db.ts

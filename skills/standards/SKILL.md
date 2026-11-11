@@ -41,5 +41,5 @@ Keep the standard ours: add or tighten rules, but don't import a generic style g
 1. Apply the approved changes in the CRM.
 2. Run `npm run check` and the targeted tests the change affects.
 3. Commit (`chore(standards): <what>`).
-4. Run `sync-back` for the same files, so the kit's template gets the change.
-5. Update "Last full review" in the kit's `references/standards-sources.md`.
+4. Run `sync-back` for the same files, so the kit's template gets the change. It writes to the owner's git checkout of the kit (see the `sync-back` skill), never to the installed plugin.
+5. In that checkout, update "Last full review" in `references/standards-sources.md`, and commit it with the synced files.

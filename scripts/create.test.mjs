@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { access, mkdir, mkdtemp, readFile, readdir, symlink, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, mkdtemp, readFile, readdir, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -72,6 +72,53 @@ test("an empty existing folder is fine", async () => {
   await mkdir(dest, { recursive: true });
   await createProject(dest, ANSWERS, { kitDir: KIT });
   await access(join(dest, "package.json"));
+});
+
+test("a country without phone rules creates nothing", async () => {
+  const dest = join(await mkdtemp(join(tmpdir(), "crm-kit-zz-")), "fitdesk");
+  await assert.rejects(createProject(dest, { ...ANSWERS, country: "ZZ" }, { kitDir: KIT }), /ZZ is not in/);
+  await assert.rejects(access(dest));
+});
+
+test("a failure after copying removes the half-made folder", async () => {
+  const dest = join(await mkdtemp(join(tmpdir(), "crm-kit-git-")), "fitdesk");
+  // No git identity anywhere, so the first commit fails
+  const saved = { ...process.env };
+  Object.assign(process.env, {
+    GIT_CONFIG_GLOBAL: "/dev/null",
+    GIT_CONFIG_NOSYSTEM: "1",
+    GIT_AUTHOR_NAME: "",
+    GIT_AUTHOR_EMAIL: "",
+    GIT_COMMITTER_NAME: "",
+    GIT_COMMITTER_EMAIL: "",
+    EMAIL: "",
+  });
+  try {
+    await assert.rejects(createProject(dest, ANSWERS, { kitDir: KIT }));
+  } finally {
+    process.env = saved;
+  }
+  await assert.rejects(access(dest), "the folder should be gone");
+  await createProject(dest, ANSWERS, { kitDir: KIT });
+});
+
+test("a file at the destination gets a clear message", async () => {
+  const dest = join(await mkdtemp(join(tmpdir(), "crm-kit-file-")), "fitdesk");
+  await writeFile(dest, "not a folder");
+  await assert.rejects(createProject(dest, ANSWERS, { kitDir: KIT }), /is a file, not a folder/);
+});
+
+test("the CLI prints usage from a folder whose path has a space", async () => {
+  const parent = join(await mkdtemp(join(tmpdir(), "office work ")), "kit");
+  await cp(join(KIT, "scripts"), join(parent, "scripts"), { recursive: true });
+  let failed = false;
+  try {
+    execFileSync("node", [join(parent, "scripts/create.mjs")], { stdio: "pipe" });
+  } catch (err) {
+    failed = true;
+    assert.match(err.stderr.toString(), /Usage: node scripts\/create\.mjs/);
+  }
+  assert.ok(failed, "create.mjs exited 0 without arguments");
 });
 
 test("invalid answers create nothing", async () => {

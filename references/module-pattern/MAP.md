@@ -9,7 +9,7 @@ One complete module, built and tested inside the template, then moved here. `bui
 | Table with an internal `id`, a `public_id` UUID for links, a human `reference` (`CON-J2M3HX7`), and scope columns (`team_id`, `owner_id`) | `edits.patch` → `server/db/schema.ts` |
 | Permissions `<area>:view_all \| view_team \| view_own \| create \| edit` | `edits.patch` → `constants/permissions.ts` |
 | Sidebar item shown to anyone with a view permission | `edits.patch` → `constants/navigation.ts` |
-| Messages in every locale: the module's namespace, `nav.<area>`, `permissions.*`, `permissionGroups.<area>`, `placeholders.note` | `edits.patch` → `messages/en.json`, `messages/ar.json` |
+| Messages: the module's namespace, `nav.<area>`, `permissions.*`, `permissionGroups.<area>` (English) | `messages.json`, merged into every `messages/<locale>.json` |
 | Demo rows and their audit entries | `edits.patch` → `scripts/setup-db.ts` |
 | Reference generator | `files/lib/reference.ts` (copy once; later modules reuse it with their own code) |
 | Zod schema built only from `schemas/fields.ts` | `files/schemas/contact.ts` |
@@ -27,9 +27,9 @@ One complete module, built and tested inside the template, then moved here. `bui
 Example: the knowledge base defines **members** for a gym, with the short code `MEM`.
 
 1. Copy `files/` into the project, renaming `contact` → `member`, `contacts` → `members`, `Contact` → `Member`, `CON` → `MEM`. Rename the folders too (`app/(app)/members/...`).
-2. Apply `edits.patch` with `git apply references/module-pattern/edits.patch` from the project root, then rename the same way. If it doesn't apply cleanly (the project has changed), make the same edits by hand: the patch shows exactly what each file gains.
+2. From the project root, run `git apply <kit>/references/module-pattern/edits.patch` (where `<kit>` is the folder containing `.claude-plugin/`), then rename the same way. It touches no message files, so it applies to every market. If it doesn't apply cleanly because the project has changed, make the same edits by hand: the patch shows exactly what each file gains.
 3. Replace the example fields (`name`, `email`, `phone`, `notes`) with the fields the knowledge base's data model lists. Keep `publicId`, `reference`, the scope columns and the timestamps.
-4. Translate the new messages into every locale in `messages/`.
+4. Merge `messages.json` into every `messages/<locale>.json`, renamed, and translate the values for each non-English locale. Keys stay the same, and ICU placeholders like `{name}` stay as they are.
 5. Add the module's nav label to the expected list in `e2e/01-access.spec.ts`.
 6. Regenerate the migration (`npm run db:generate`), reset the local data (`npm run db:setup -- --reset`), then run `npm run check` and the module's spec.
 

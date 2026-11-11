@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { UI_REGISTRY } from "../components/ui/registry";
+import { LOCALE_COOKIE } from "../constants/i18n";
+import { LOCALES, RTL_LOCALES } from "../constants/market";
 import { loginAs, pickDate } from "./helpers";
 
 // The component library is the test bed for components/ui: every registry entry has a page with live demos
@@ -118,6 +120,24 @@ test.describe("UI library", () => {
     await page.goto("/design-system/DatePicker");
     await pickDate(page, "Expiry date", "2031-02-14");
     await expect(page.getByRole("button", { name: "Expiry date", exact: true })).toHaveText(/14 Feb 2031/);
+  });
+
+  test("DatePicker arrow keys follow the reading direction of every language", async ({ page, context }) => {
+    for (const locale of LOCALES) {
+      await context.addCookies([{ name: LOCALE_COOKIE, value: locale, url: "http://localhost" }]);
+      await page.goto("/design-system/DatePicker");
+      await page.locator('[data-ui="DatePicker"] button[aria-haspopup="dialog"]').first().click();
+      const focused = () => page.evaluate(() => (document.activeElement as HTMLElement | null)?.dataset.day ?? "");
+      const start = await focused();
+      await page.keyboard.press("ArrowLeft");
+      const day = (iso: string, delta: number) => {
+        const [y, m, d] = iso.split("-").map(Number);
+        const next = new Date(y, m - 1, d + delta);
+        return `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
+      };
+      // In a right-to-left language the next day is on the left
+      expect(await focused(), locale).toBe(day(start, RTL_LOCALES.includes(locale) ? 1 : -1));
+    }
   });
 
   test("Toast appears after an action", async ({ page }) => {

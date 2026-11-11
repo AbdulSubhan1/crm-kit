@@ -52,3 +52,29 @@ test("manifests with different versions are reported", async () => {
   await writeFile(path, (await readFile(path, "utf8")).replace('"version": "0.1.0"', '"version": "0.9.0"'));
   assert.ok((await checkKit(dir)).includes("version mismatch: plugin.json 0.1.0, marketplace.json 0.9.0"));
 });
+
+test("old cookie names and business tables in migrations are reported", async () => {
+  const dir = await copyOfKit();
+  await appendFile(join(dir, "template/constants/config.ts"), '\nexport const OLD = "pd_session";\n');
+  const { mkdir } = await import("node:fs/promises");
+  await mkdir(join(dir, "template/drizzle"), { recursive: true });
+  await writeFile(join(dir, "template/drizzle/0001_x.sql"), 'CREATE TABLE "leads" ("id" serial);\n');
+  const problems = await checkKit(dir);
+  assert.ok(problems.some((p) => /constants\/config\.ts:\d+: business word "pd_session"/.test(p)), problems.join("\n"));
+  assert.ok(problems.some((p) => /drizzle\/0001_x\.sql:1: business word "leads"/.test(p)), problems.join("\n"));
+});
+
+test("the CLI works from a folder whose path has a space", async () => {
+  const { execFileSync } = await import("node:child_process");
+  const parent = join(await mkdtemp(join(tmpdir(), "crm kit ")), "office work");
+  await cp(await copyOfKit(), parent, { recursive: true });
+  await appendFile(join(parent, "template/app/(app)/page.tsx"), "\n// shows the newest lead\n");
+  let failed = false;
+  try {
+    execFileSync("node", [join(parent, "scripts/check-kit.mjs")], { stdio: "pipe" });
+  } catch (err) {
+    failed = true;
+    assert.match(err.stdout.toString(), /business word "lead"/);
+  }
+  assert.ok(failed, "check-kit exited 0 from a path with a space");
+});
