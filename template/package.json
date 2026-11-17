@@ -49,5 +49,11 @@
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.33"
+    },
+    "katex": "0.18.2"
   }
 }
