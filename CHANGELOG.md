@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- **Security:** `overrides` in the template pin PostCSS 8.5.33 inside Next.js 15 (4 advisories, 2 high) and KaTeX 0.18.2 under Mermaid (1 low). `npm audit --omit=dev` is clean. Found by the standards step for AgencyDesk; the review is logged in `references/standards-sources.md`.
+
 ## 0.2.0
 
 UX and security work from PolicyDesk, synced back.
