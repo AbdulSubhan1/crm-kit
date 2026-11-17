@@ -8,7 +8,7 @@
     {
       "name": "crm-kit",
       "source": "./",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Build a CRM for any industry to one standard: research-based components, knowledge base and coding standard, then code and tests."
     }
   ]

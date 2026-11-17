@@ -9,21 +9,22 @@
 | Country      | From the conversation or the owner's location                                                                 |
 | Languages    | From the country (table below)                                                                                |
 | Currency     | From the country (table below)                                                                                |
+| Time zone    | From the country (table below); not asked unless the country spans several zones                              |
 | Brand colour | Teal `#0f766e` / `#115e59` / `#ccfbf1` by default; offer 2–3 that suit the industry, shown as swatches        |
 
-| Country | Languages     | Currency |
-| ------- | ------------- | -------- |
-| PK      | en, ur        | PKR      |
-| AE      | en, ar        | AED      |
-| SA      | en, ar        | SAR      |
-| QA      | en, ar        | QAR      |
-| KW      | en, ar        | KWD      |
-| BH      | en, ar        | BHD      |
-| OM      | en, ar        | OMR      |
-| IN      | en, hi        | INR      |
-| GB      | en            | GBP      |
-| US      | en            | USD      |
-| other   | en            | USD      |
+| Country | Languages | Currency | Time zone                          |
+| ------- | --------- | -------- | ---------------------------------- |
+| PK      | en, ur    | PKR      | Asia/Karachi                       |
+| AE      | en, ar    | AED      | Asia/Dubai                         |
+| SA      | en, ar    | SAR      | Asia/Riyadh                        |
+| QA      | en, ar    | QAR      | Asia/Qatar                         |
+| KW      | en, ar    | KWD      | Asia/Kuwait                        |
+| BH      | en, ar    | BHD      | Asia/Bahrain                       |
+| OM      | en, ar    | OMR      | Asia/Muscat                        |
+| IN      | en, hi    | INR      | Asia/Kolkata                       |
+| GB      | en        | GBP      | Europe/London                      |
+| US      | en        | USD      | America/New_York (ask: many zones) |
+| other   | en        | USD      | UTC                                |
 
 ## Brand colours
 

@@ -24,7 +24,7 @@ For each question the owner skips or answers "you decide", suggest a value with 
 
 - **Industry:** never guess. If the owner is unsure, suggest 2–3 industries where a CRM clearly helps.
 - **App name:** offer three short names.
-- **Languages and currency:** follow from the country.
+- **Languages, currency and time zone:** follow from the country. Ask for the time zone only when the country has several (the US).
 - **Brand colour:** offer 2–3 colours that suit the industry, shown as swatches.
 
 Business questions (teams, roles, statuses, money rules) are **not** asked here. They come after research, in the format of `references/question-format.md`.
@@ -36,7 +36,7 @@ Confirm the final answers back in one short list, and wait for "go".
 1. Write the answers to a temp JSON file in this shape:
 
    ```json
-   { "industry": "gym", "appName": "FitDesk", "slug": "fitdesk", "country": "PK", "locales": ["en", "ur"], "currency": "PKR", "brand": { "base": "#0f766e", "strong": "#115e59", "soft": "#ccfbf1" } }
+   { "industry": "gym", "appName": "FitDesk", "slug": "fitdesk", "country": "PK", "locales": ["en", "ur"], "currency": "PKR", "timeZone": "Asia/Karachi", "brand": { "base": "#0f766e", "strong": "#115e59", "soft": "#ccfbf1" } }
    ```
 
 2. Run `node <kit>/scripts/create.mjs --dest ~/<slug> --answers <file>`. It refuses a folder that already exists and isn't empty: ask the owner for another name instead of deleting anything.

@@ -1,21 +1,34 @@
-// The six start questions of a new CRM, checked and, where unanswered, suggested.
+// The six start questions of a new CRM, checked and, where unanswered, suggested. The time zone follows from the country.
 // The same table is written out for people in references/market-defaults.md.
 
-/** Languages (English first) and currency per country, ISO codes. */
+/** Languages (English first), currency and time zone per country: ISO codes and IANA zones. */
 export const MARKETS = {
-  PK: { locales: ["en", "ur"], currency: "PKR" },
-  AE: { locales: ["en", "ar"], currency: "AED" },
-  SA: { locales: ["en", "ar"], currency: "SAR" },
-  QA: { locales: ["en", "ar"], currency: "QAR" },
-  KW: { locales: ["en", "ar"], currency: "KWD" },
-  BH: { locales: ["en", "ar"], currency: "BHD" },
-  OM: { locales: ["en", "ar"], currency: "OMR" },
-  IN: { locales: ["en", "hi"], currency: "INR" },
-  GB: { locales: ["en"], currency: "GBP" },
-  US: { locales: ["en"], currency: "USD" },
+  PK: { locales: ["en", "ur"], currency: "PKR", timeZone: "Asia/Karachi" },
+  AE: { locales: ["en", "ar"], currency: "AED", timeZone: "Asia/Dubai" },
+  SA: { locales: ["en", "ar"], currency: "SAR", timeZone: "Asia/Riyadh" },
+  QA: { locales: ["en", "ar"], currency: "QAR", timeZone: "Asia/Qatar" },
+  KW: { locales: ["en", "ar"], currency: "KWD", timeZone: "Asia/Kuwait" },
+  BH: { locales: ["en", "ar"], currency: "BHD", timeZone: "Asia/Bahrain" },
+  OM: { locales: ["en", "ar"], currency: "OMR", timeZone: "Asia/Muscat" },
+  IN: { locales: ["en", "hi"], currency: "INR", timeZone: "Asia/Kolkata" },
+  GB: { locales: ["en"], currency: "GBP", timeZone: "Europe/London" },
+  // The US spans several zones: ask the owner which one the team works in
+  US: { locales: ["en"], currency: "USD", timeZone: "America/New_York" },
 };
 
-const FALLBACK = { locales: ["en"], currency: "USD" };
+const FALLBACK = { locales: ["en"], currency: "USD", timeZone: "UTC" };
+
+/** The zone every date is shown in. A missing answer (a CRM made before 0.2.0) falls back to the country's. */
+export const timeZoneFor = (a) => a.timeZone ?? (MARKETS[a.country] ?? FALLBACK).timeZone;
+
+const isTimeZone = (zone) => {
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: zone });
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 /** Teal: calm, readable on white and dark, and not tied to any one industry. */
 export const DEFAULT_BRAND = { base: "#0f766e", strong: "#115e59", soft: "#ccfbf1" };
@@ -44,6 +57,9 @@ export function validateAnswers(a) {
     errors.push('locales: a list of 2-letter codes starting with "en"');
   }
   if (typeof x.currency !== "string" || !/^[A-Z]{3}$/.test(x.currency)) errors.push("currency: use a 3-letter ISO code");
+  if (x.timeZone !== undefined && (typeof x.timeZone !== "string" || !isTimeZone(x.timeZone))) {
+    errors.push('timeZone: use an IANA zone like "Asia/Karachi"');
+  }
   for (const key of ["base", "strong", "soft"]) {
     if (!HEX.test(x.brand?.[key] ?? "")) errors.push(`brand.${key}: use a hex colour like #0f766e`);
   }
@@ -65,6 +81,7 @@ export function suggestDefaults(partial) {
     country,
     locales: partial.locales ?? market.locales,
     currency: partial.currency ?? market.currency,
+    timeZone: partial.timeZone ?? market.timeZone,
     brand: partial.brand ?? DEFAULT_BRAND,
   };
 }

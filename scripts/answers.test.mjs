@@ -38,6 +38,7 @@ test("suggestDefaults fills a Pakistani gym", () => {
   const a = suggestDefaults({ industry: "gym", country: "PK" });
   assert.deepEqual(a.locales, ["en", "ur"]);
   assert.equal(a.currency, "PKR");
+  assert.equal(a.timeZone, "Asia/Karachi");
   assert.ok(a.appName.length > 0);
   assert.match(a.slug, /^[a-z0-9-]+$/);
   assert.equal(validateAnswers(a).ok, true);
@@ -60,4 +61,12 @@ test("suggestDefaults falls back to English and USD for an unknown country", () 
   const a = suggestDefaults({ industry: "salon", country: "ZZ" });
   assert.deepEqual(a.locales, ["en"]);
   assert.equal(a.currency, "USD");
+  assert.equal(a.timeZone, "UTC");
+});
+
+test("validateAnswers refuses an unknown time zone and allows none", () => {
+  const a = suggestDefaults({ industry: "gym", country: "PK" });
+  assert.equal(validateAnswers({ ...a, timeZone: "Mars/Olympus" }).ok, false);
+  const { timeZone: _, ...withoutZone } = a;
+  assert.equal(validateAnswers(withoutZone).ok, true);
 });

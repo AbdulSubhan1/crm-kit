@@ -50,16 +50,29 @@ export function LayoutDemos({ name, path, params }: DemoProps) {
     }
     case "PillNav":
       return (
-        <Demo title="Motion highlight" description="Hover the pills: one background glides between them.">
-          <PillNav
-            label={t("samples.plan")}
-            items={SAMPLE_PLANS.map((p) => ({
-              href: withParams(path, params, { plan: p }),
-              label: t(`samples.plans.${p}`),
-              active: (params.plan ?? "basic") === p,
-            }))}
-          />
-        </Demo>
+        <>
+          <Demo title="Motion highlight" description="Hover the pills: one background glides between them.">
+            <PillNav
+              label={t("samples.plan")}
+              items={SAMPLE_PLANS.map((p) => ({
+                href: withParams(path, params, { plan: p }),
+                label: t(`samples.plans.${p}`),
+                active: (params.plan ?? "basic") === p,
+              }))}
+            />
+          </Demo>
+          <Demo title="Segment" description="A compact switch, like a dashboard's period.">
+            <PillNav
+              variant="segment"
+              label={t("samples.period.label")}
+              items={(["month", "quarter", "year"] as const).map((p) => ({
+                href: withParams(path, params, { period: p }),
+                label: t(`samples.period.${p}`),
+                active: (params.period ?? "month") === p,
+              }))}
+            />
+          </Demo>
+        </>
       );
     case "PageHeader":
       return (
@@ -100,6 +113,14 @@ export function LayoutDemos({ name, path, params }: DemoProps) {
                   <CellText primary="Northwind Traders" secondary={t("samples.itemCount", { count: 12 })} />
                 </ListRow>
               </ul>
+            </Panel>
+          </Demo>
+          <Demo
+            title="Folds on a phone"
+            description="collapsible: tap the title to open it below lg; always open above."
+          >
+            <Panel title={t("samples.details")} summary={`· ${t("samples.perYear", { amount: "$1,140" })}`} collapsible>
+              <DetailList items={[{ label: t("samples.plan"), value: t("samples.plans.standard") }]} />
             </Panel>
           </Demo>
         </>

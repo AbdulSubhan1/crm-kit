@@ -44,3 +44,4 @@ npm run test:e2e     # Playwright (run `npx playwright install chromium` once)
 2. Add a Neon Postgres database under **Storage** with the env prefix `DATABASE`, so it sets `DATABASE_URL`. Put the database and the function region (Settings → Functions) in the same region.
 3. Add `AUTH_SECRET`, for example from `openssl rand -base64 32`.
 4. Run `DATABASE_URL=<neon url> npm run db:setup` once.
+5. Optional: set `MONITOR_URL` and `MONITOR_LOG_TOKEN` to send login events (failed, blocked, succeeded) to a monitor such as Pulse.

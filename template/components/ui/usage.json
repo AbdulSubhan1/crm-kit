@@ -110,6 +110,8 @@
     "app/(app)/audit/page.tsx",
     "app/(app)/design-system/[name]/page.tsx"
   ],
+  "TableFilters": [],
+  "PriceBreakdown": [],
   "CellText": [
     "app/(app)/admin/users/page.tsx"
   ],

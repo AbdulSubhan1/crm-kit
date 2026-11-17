@@ -1,7 +1,7 @@
 // Applies the start answers to a project made from template/: market settings, languages and brand colour.
 import { copyFile, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { validateAnswers } from "./lib/answers.mjs";
+import { timeZoneFor, validateAnswers } from "./lib/answers.mjs";
 
 /** Scripts written right to left. Any other language is laid out left to right. */
 export const RTL = new Set(["ar", "ur", "fa", "he", "ps", "sd"]);
@@ -13,7 +13,7 @@ function marketFile(a) {
   const rtl = a.locales.filter((l) => RTL.has(l)).map((l) => `"${l}"`).join(", ");
   const names = a.locales.map((l) => `${l}: ${JSON.stringify(nameOf(l))}`).join(", ");
   return `// The market this CRM serves. The CRM kit's configure script writes this file from the start answers;
-// everything that depends on the market (languages, direction, phone numbers, money) reads it from here.
+// everything that depends on the market (languages, direction, phone numbers, money, dates) reads it from here.
 
 export const APP_NAME = ${JSON.stringify(a.appName)};
 
@@ -28,6 +28,9 @@ export const DEFAULT_COUNTRY = "${a.country}";
 
 /** ISO 4217 currency for money. */
 export const CURRENCY = "${a.currency}";
+
+/** IANA time zone every date is shown in, whatever the server's own zone. */
+export const TIME_ZONE = "${timeZoneFor(a)}";
 `;
 }
 
