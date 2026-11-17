@@ -54,7 +54,8 @@ export const UI_REGISTRY: RegistryEntry[] = [
     file: "field.tsx",
     group: "Forms",
     description: "Label + control + hint or translated error. The demo runs the shared rules from schemas/fields.ts.",
-    props: "label; hint?; error?: message key; group?: true for multi-input controls such as PhoneInput",
+    props:
+      "label; hint?; error?: message key; group?: true for multi-input controls such as PhoneInput; optional?: marks the field (Optional); tag?: a note at the end of the label row",
     example: '<Field label={t("email")} error={errorOf("email")}><Input {...form.register("email")} /></Field>',
   },
   {
@@ -208,7 +209,8 @@ export const UI_REGISTRY: RegistryEntry[] = [
       ["Tab", "Leaves the group"],
     ],
     description: "One choice from a short list with a legend: plain rows, or cards with a line of description.",
-    props: 'name; options: { value; label; description? }[]; defaultValue?; label; variant?: "list" | "cards"',
+    props:
+      'name; options: { value; label; description? }[]; defaultValue?; label; variant?: "list" | "cards" | "pills"; inputProps? (e.g. register(name)); invalid?; error?',
     example: '<RadioGroup name="method" label="Payment method" variant="cards" options={…} />',
   },
   {
@@ -339,7 +341,8 @@ export const UI_REGISTRY: RegistryEntry[] = [
     name: "Tabs",
     file: "tabs.tsx",
     group: "Navigation",
-    description: "Underlined tabs for sections of one record, driven by the URL.",
+    description:
+      "Underlined tabs for sections of one record or a list's filter, driven by the URL. Counts show as chips.",
     props: "tabs: { id; label; href; count? }[]; current; label",
     example: '<Tabs current={tab} label="Sections" tabs={…} />',
   },
@@ -347,8 +350,9 @@ export const UI_REGISTRY: RegistryEntry[] = [
     name: "PillNav",
     file: "pill-nav.tsx",
     group: "Navigation",
-    description: "Pick one of a few views, e.g. a plan. DataTable uses it for its filters.",
-    props: "items: { href; label; active }[]; label",
+    description:
+      "Pick one of a few views, e.g. a plan. DataTable uses it for its filters; segment is a compact switch (a dashboard period).",
+    props: 'items: { href; label; active }[]; label; variant?: "pills" | "segment"',
     example: '<PillNav label="Product" items={PRODUCTS.map(…)} />',
   },
 
@@ -400,7 +404,7 @@ export const UI_REGISTRY: RegistryEntry[] = [
     group: "Feedback",
     description:
       "A share of a total on the native <progress>. With label it shows the percentage; without, it is a plain bar.",
-    props: "value; max?: 100; label?",
+    props: 'value; max?: 100; label?; tone?: "brand" | "neutral" | "risk" | "info"',
     example: '<Progress label="Documents collected" value={3} max={5} />',
   },
   {
@@ -418,7 +422,7 @@ export const UI_REGISTRY: RegistryEntry[] = [
     file: "page-header.tsx",
     group: "Layout",
     description: "The top of every page: title, one-line description, optional back link and main action.",
-    props: "title; description?; action?; back?: { href; label }",
+    props: "title; badges?; description?; action?; back?: { href; label }",
     example: '<PageHeader title="Members" description="…" action={<ButtonLink …/>} />',
   },
   {
@@ -426,7 +430,7 @@ export const UI_REGISTRY: RegistryEntry[] = [
     file: "panel.tsx",
     group: "Layout",
     description: "A titled section of a page. Use flush for tables, lists and tabs; footer for an add form.",
-    props: "title?; description?; actions?; footer?; flush?; children",
+    props: "title?; description?; actions?; footer?; flush?; collapsible?: folds on phones; summary?; children",
     example: '<Panel title="Customer" actions={<Button>Save</Button>}>…</Panel>',
   },
   {
@@ -452,11 +456,30 @@ export const UI_REGISTRY: RegistryEntry[] = [
     file: "data-table.tsx",
     group: "Data",
     description:
-      "Every list: columns, search (?q=), pill filters (?filter=), pagination (?page=) and an empty state, all server-side.",
+      "Every list: columns, search (?q=), filters as pills or counted tabs (?filter=), dropdown and on/off filters, pagination (?page=) and an empty state, all server-side. Rows can be links; columns give way by priority; on phones rows become stacked cards.",
     props:
-      "rows; columns: Column[]; rowKey; path; params?; search?; filters?; pagination?; empty; minWidth?; embedded?",
+      'rows; columns: Column[] (key; header; cell; align?; nowrap?; numeric?: end-aligned tabular amounts; priority?: 1 | 2 | 3); rowKey; path; params?; search?; filters?: { label; options: { value; label; count? }[]; variant?: "pills" | "tabs"; total? }; refine?: { selects?; toggles? }; pagination?; empty; minWidth?; embedded?; select?; rowHref?: (row) => string; mobile?: "rows" with summary: (row) => { title; amount?; meta?; badges?; date? }',
     example:
       '<DataTable path="/members" params={params} rows={rows} columns={[…]} pagination={{ page, pageSize, total }} />',
+  },
+  {
+    name: "TableFilters",
+    file: "table-filters.tsx",
+    group: "Data",
+    description:
+      "Dropdown and on/off filters that go straight to the URL. DataTable renders it from its refine prop; use that.",
+    props: "path; params; selects?: { name; label; placeholder; options }[]; toggles?: { name; label }[]",
+    example: '<DataTable refine={{ toggles: [{ name: "overdue", label: "Overdue only" }] }} … />',
+  },
+  {
+    name: "PriceBreakdown",
+    file: "price-breakdown.tsx",
+    group: "Data",
+    description:
+      "What a price is made of: one line per part (base price, extras, discount) and the total under a rule. Amounts come formatted.",
+    props: 'caption; lines: { label; amount; tone?: "included" | "minus" }[]; total: { label; amount }',
+    example:
+      '<PriceBreakdown caption="Price breakdown" lines={[{ label: "Monthly plan", amount: money(1110) }]} total={{ label: "Total", amount: money(1140) }} />',
   },
   {
     name: "CellText",
@@ -470,8 +493,9 @@ export const UI_REGISTRY: RegistryEntry[] = [
     name: "ListRow",
     file: "list-row.tsx",
     group: "Data",
-    description: "One row of a simple list inside a flush Panel, with an action at the end.",
-    props: "children; action?; muted?",
+    description:
+      "One row of a simple list inside a flush Panel, with an action at the end. With href the row is a link.",
+    props: "children; action?; muted?; href?",
     example: '<ListRow action={<Button size="sm">Disable</Button>}>…</ListRow>',
   },
   {
@@ -486,8 +510,9 @@ export const UI_REGISTRY: RegistryEntry[] = [
     name: "Stat",
     file: "stat.tsx",
     group: "Data",
-    description: "A headline number with its label, optionally a link.",
-    props: "label; value; href?",
+    description:
+      "A headline number with its label, optionally a link. Can carry a comparison line, a hint, a badge and an action.",
+    props: "label; value; href?; hint?; delta?: { value: percent; label }; badge?; action?: link text",
     example: '<Stat label="Active members" value={<NumberTicker value={12} />} href="/members" />',
   },
   {

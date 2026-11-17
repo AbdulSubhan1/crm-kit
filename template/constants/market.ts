@@ -1,5 +1,5 @@
 // The market this CRM serves. The CRM kit's configure script writes this file from the start answers;
-// everything that depends on the market (languages, direction, phone numbers, money) reads it from here.
+// everything that depends on the market (languages, direction, phone numbers, money, dates) reads it from here.
 
 export const APP_NAME = "CRM";
 
@@ -14,3 +14,6 @@ export const DEFAULT_COUNTRY = "AE";
 
 /** ISO 4217 currency for money. */
 export const CURRENCY = "USD";
+
+/** IANA time zone every date is shown in, whatever the server's own zone. */
+export const TIME_ZONE = "Asia/Dubai";

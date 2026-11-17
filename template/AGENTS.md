@@ -21,7 +21,8 @@ These rules are strict. They apply to every person and every AI model working in
 
 ## 2. Single source of truth
 
-- A value is defined once and imported everywhere else. Statuses and their colours: `constants/statuses.ts`. Market settings (app name, languages, country, currency): `constants/market.ts`. Demo roles and users: `constants/demo.ts`. Permissions: `constants/permissions.ts`. Limits and cookie names: `constants/config.ts`. Sidebar: `constants/navigation.ts`.
+- A value is defined once and imported everywhere else. Statuses and their colours: `constants/statuses.ts`. Market settings (app name, languages, country, currency, time zone): `constants/market.ts`. Demo roles and users: `constants/demo.ts`. Permissions: `constants/permissions.ts`. Limits and cookie names: `constants/config.ts`. Sidebar: `constants/navigation.ts`.
+- Dates and money are shown only through `lib/format.ts` (`shortDate`, `dateTime`, `money`). Dates are formatted in `TIME_ZONE` from `constants/market.ts`, never in the server's own zone.
 - Colours, fonts and radii exist only as tokens in `app/globals.css` (`@theme`). Use the token classes (`bg-brand`, `text-muted`), never hex values.
 - Shared class recipes live in `components/ui/styles.ts`.
 - Field rules (email, phone, first/last/full name, required text, amount, date) live once in `schemas/fields.ts`. Form schemas in `schemas/` are built only from them, and the form and the server action both use the same schema.
@@ -85,6 +86,7 @@ These rules are strict. They apply to every person and every AI model working in
 - Row-level scope: every list and detail query applies `rowScope(user, area, { team, owner })` from `server/queries/scope.ts`, with `<area>:view_all | view_team | view_own` permissions. A record outside the user's scope returns 404.
 - Every mutation writes an audit entry with `logAudit`. Use the record's `entity` and `entityId`, so it shows on that record's timeline.
 - Validate uploads by size and MIME type on the server, and accept only document types configured for the product.
+- Login: `server/login-guard.ts` blocks an address after 10 failed logins in 15 minutes, and every wrong login gets the same message, so the form never tells which emails exist. Security events go to the monitor in `server/monitor.ts` when `MONITOR_URL` and `MONITOR_LOG_TOKEN` are set.
 
 ## 8. Code style
 

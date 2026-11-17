@@ -7,6 +7,7 @@ import { test } from "node:test";
 import { createProject } from "./create.mjs";
 
 const KIT = new URL("../", import.meta.url).pathname;
+const { version: VERSION } = JSON.parse(await readFile(join(KIT, ".claude-plugin/plugin.json"), "utf8"));
 const ANSWERS = {
   industry: "gym",
   appName: "FitDesk",
@@ -28,7 +29,7 @@ test("creates a configured project with one commit", async () => {
   await access(join(dest, "messages/ur.json"));
 
   const marker = JSON.parse(await readFile(join(dest, ".crm-kit.json"), "utf8"));
-  assert.equal(marker.kitVersion, "0.1.0");
+  assert.equal(marker.kitVersion, VERSION);
   assert.deepEqual(marker.answers, ANSWERS);
 
   for (const skipped of ["node_modules", ".next", ".pglite", "test-results"]) {
@@ -36,7 +37,7 @@ test("creates a configured project with one commit", async () => {
   }
 
   const log = execFileSync("git", ["log", "--format=%s"], { cwd: dest, encoding: "utf8" }).trim().split("\n");
-  assert.deepEqual(log, ["chore: start from crm-kit 0.1.0"]);
+  assert.deepEqual(log, [`chore: start from crm-kit ${VERSION}`]);
 });
 
 test("the files create writes pass the project's own Prettier check", async (t) => {

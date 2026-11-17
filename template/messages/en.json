@@ -37,7 +37,8 @@
     "previous": "Previous",
     "next": "Next",
     "today": "Today",
-    "saved": "Saved"
+    "saved": "Saved",
+    "optional": "Optional"
   },
   "nav": {
     "main": "Main",
@@ -87,7 +88,8 @@
     "notFound": "This record does not exist or you can't see it",
     "generalTitle": "That didn't work",
     "generalBody": "Something was missing or no longer allowed. Check your choices and try again.",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "tooManyAttempts": "Too many failed sign-ins from this network. Try again in 15 minutes."
   },
   "login": {
     "title": "Sign in",
@@ -295,7 +297,38 @@
     "stats": {
       "openRecords": "Open records",
       "conversion": "Conversion rate",
-      "revenue": "Revenue this year"
+      "revenue": "Revenue this year",
+      "vsPrevious": "vs same point in {previous}",
+      "oldest": "Oldest {days} days",
+      "wonOfClosed": "{won} won of {closed} closed",
+      "reviewNow": "Review now"
+    },
+    "anyOwner": "Any owner",
+    "overdueOnly": "Overdue only",
+    "source": "Source",
+    "sources": {
+      "phone": "Phone call",
+      "referral": "Referral",
+      "website": "Website"
+    },
+    "notes": "Notes",
+    "fromImport": "From import",
+    "details": "Details",
+    "perYear": "{amount} a year",
+    "period": {
+      "label": "Period",
+      "month": "This month",
+      "quarter": "This quarter",
+      "year": "This year"
+    },
+    "price": {
+      "caption": "Price breakdown for the Standard plan",
+      "base": "Standard plan, 1 year",
+      "setup": "Setup",
+      "extra": "Extra seat",
+      "included": "Included",
+      "discount": "Discount",
+      "total": "Total a year"
     }
   }
 }

@@ -6,6 +6,7 @@ import { test } from "node:test";
 import { checkKit } from "./check-kit.mjs";
 
 const KIT = new URL("../", import.meta.url).pathname;
+const { version: VERSION } = JSON.parse(await readFile(join(KIT, ".claude-plugin/plugin.json"), "utf8"));
 const HEAVY = new Set(["node_modules", ".next", "test-results", "playwright-report", ".git"]);
 
 async function copyOfKit() {
@@ -49,8 +50,8 @@ test("a business word in the template is reported with its line", async () => {
 test("manifests with different versions are reported", async () => {
   const dir = await copyOfKit();
   const path = join(dir, ".claude-plugin/marketplace.json");
-  await writeFile(path, (await readFile(path, "utf8")).replace('"version": "0.1.0"', '"version": "0.9.0"'));
-  assert.ok((await checkKit(dir)).includes("version mismatch: plugin.json 0.1.0, marketplace.json 0.9.0"));
+  await writeFile(path, (await readFile(path, "utf8")).replace(`"version": "${VERSION}"`, '"version": "9.9.9"'));
+  assert.ok((await checkKit(dir)).includes(`version mismatch: plugin.json ${VERSION}, marketplace.json 9.9.9`));
 });
 
 test("old cookie names and business tables in migrations are reported", async () => {

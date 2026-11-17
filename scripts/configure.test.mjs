@@ -38,6 +38,7 @@ test("writes the market, swaps Arabic for Urdu and sets the brand", async () => 
   assert.match(market, /RTL_LOCALES: readonly string\[\] = \["ur"\]/);
   assert.match(market, /DEFAULT_COUNTRY = "PK"/);
   assert.match(market, /CURRENCY = "PKR"/);
+  assert.match(market, /TIME_ZONE = "Asia\/Karachi"/);
   assert.match(market, /ur: "اردو"/);
 
   const en = JSON.parse(await readFile(join(dir, "messages/en.json"), "utf8"));
